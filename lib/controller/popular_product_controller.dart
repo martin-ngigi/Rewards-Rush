@@ -10,6 +10,7 @@ class PopularProductController extends GetxController{
   PopularProductController({required this.popularProductRepo});
   
   List<dynamic> _popularProductList = []; //"_" means its private
+  List<Product> _popularProductListModel = []; //"_" means its private
 
   bool _isLoaded = false;//private
   bool get isLoaded => _isLoaded;//public getter
@@ -28,7 +29,9 @@ class PopularProductController extends GetxController{
       _popularProductList.addAll(Product.fromJson(response.body).products);
       print("------->[PopularProductController] Popular products: ${_popularProductList.length}");
       for(int i=0; i<_popularProductList.length; i++){
-        // print("Product $i is ${_popularProductList[i].toString()}\n");
+        ProductModel productModel = _popularProductList[i];
+        print("Product at $i is: ${productModel.name} ");
+
       }
       _isLoaded = true;
       update(); //similar to set state

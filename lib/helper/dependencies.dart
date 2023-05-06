@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:rewards_rush/controller/generate_url_controller.dart';
+import 'package:rewards_rush/data/repository/auth_repo.dart';
+import 'package:rewards_rush/models/generate_url_reponse_model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,8 +23,10 @@ Future<void> init() async{
 
   //repos
   Get.lazyPut(() => PopularProductRepo(apiClient: Get.find()));
+  Get.lazyPut(() => GenerateUrlRepo(apiClient: Get.find()));
 
   //controllers
   Get.lazyPut(() => PopularProductController(popularProductRepo: Get.find()));
+  Get.lazyPut(() => GenerateUrlController(authRepo: Get.find()));
 
 }

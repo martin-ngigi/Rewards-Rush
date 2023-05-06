@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rewards_rush/models/generate_url_reponse_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/app_constants.dart';
@@ -23,12 +24,6 @@ class ApiClient extends GetConnect implements GetxService{
    };
   }
 
-  void updateHeader(String token ){
-    _mainHeaders = {
-      "Content-Type": "application/json; charset=UTF-8",
-      "Authorization": "Bearer $token",
-    };
-  }
 
   Future<Response> getData(String uri, {Map<String, String>? headers}) async{ //{Map<String, String>? headers} is an optional argument
     try{
@@ -46,14 +41,15 @@ class ApiClient extends GetConnect implements GetxService{
 
   //sending data to the server
   Future<Response> postData(String uri, dynamic body) async {
-    print("1. [ApiClient]"+body.toString());
+    print("1. [ApiClient] uri being posted: "+uri.toString());
+    print("1. [ApiClient] data being posted: "+body.toString());
     try{
       Response response = await post(uri, body, headers: _mainHeaders);
-      print("2. [ApiClient] posting. "+response.body.toString());
+      print("2. [ApiClient] response of data posted. "+response.body.toString());
       return response;
     }
     catch(e){
-      print(e.toString());
+      print("This is my error"+e.toString());
       return Response(statusCode: 1, statusText: "Error getting data:: "+e.toString());
     }
   }

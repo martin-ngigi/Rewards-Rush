@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         //home: SignInPage(),
         //home: SplashScreen(),
-        initialRoute: RouteHelper.getSplashPage(),
+        initialRoute: RouteHelper.getGenerateUrl(),
         getPages: RouteHelper.routes,
         theme: ThemeData(
             primaryColor: AppColors.mainColor,
