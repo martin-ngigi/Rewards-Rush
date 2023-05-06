@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rewards_rush/controller/generate_url_controller.dart';
+import 'package:rewards_rush/helper/dependencies.dart';
 import 'package:rewards_rush/models/generate_url_model.dart';
+import 'package:rewards_rush/widgets/show_custom_snackbar.dart';
 
 import '../../routes/route_helper.dart';
 import '../models/signup_body_model.dart';
@@ -17,19 +19,36 @@ import '../widgets/custom_loader.dart';
 import 'dart:math';
 
 
-class GenerateUrlPage extends StatelessWidget {//used stateless widget because GET already has statefull.. but one should used stfull
+class GenerateUrlPage extends StatefulWidget {//used stateless widget because GET already has statefull.. but one should used stfull
   const GenerateUrlPage({Key? key}) : super(key: key);
 
   @override
+  State<GenerateUrlPage> createState() => _GenerateUrlPageState();
+}
+
+class _GenerateUrlPageState extends State<GenerateUrlPage> {
+
+
+  var emailController = TextEditingController();
+  var amountController = TextEditingController();
+  var currencyController = TextEditingController();
+  var referenceController = TextEditingController();
+  var callbackController = TextEditingController();
+  var phoneController = TextEditingController();
+  var generatedUrlController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailController.text = "martin@gmail.com";
+    amountController.text= "10";
+    callbackController.text = "www.budpay.com";
+    phoneController.text = "+254797292290";
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    var emailController = TextEditingController();
-    var amountController = TextEditingController();
-    var currencyController = TextEditingController();
-    var referenceController = TextEditingController();
-    var callbackController = TextEditingController();
-    var phoneController = TextEditingController();
-
 
     // registration method
     void _registration(GenerateUrlController generateUrlController){
@@ -52,7 +71,7 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
           email: email,
           amount: amount,
           currency: "KES",
-          reference:randomNumber2.toString(),
+          reference: "",
           callback: "www.budpay.com"
       );
 
@@ -60,15 +79,19 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
       //     email: "adewale@budpay.com",
       //     amount: "20",
       //     currency: "KES",
-      //     reference: "123456890123mn4mm5ckpskt0dsjlwk4gsd158q",
+      //     reference: "123456890123mn4mm5ckpskt0dsjlwk4gsd158q", ///should be unique
       //     callback: "www.budpay.com"
       // );
         generateUrlController.registration(generateUrlModel,phone).then((status){
           if(status.isSuccess){
             print("---> [SignUpPage] Success sending to user");
+            setState(() {
+              generatedUrlController.text = Get.find<GenerateUrlController>().message;
+            });
           }
           else{
             print("------> [GenerateUrlPage] error ");
+            showCustomSnackBar("${status.message}");
 
           }
         });
@@ -78,7 +101,7 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
     return Scaffold(
       backgroundColor: Colors.white,
       body: GetBuilder<GenerateUrlController>(builder: (_authController){
-        return SingleChildScrollView(
+        return !_authController.isLoading? SingleChildScrollView(
           // physics: BouncingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,26 +125,26 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
                 hintText: "amount",
                 icon: Icons.attach_money,
                 textType: TextInputType.number,
-                isObscure: true, //hide password
+                isObscure: false, //hide password
               ),
-              SizedBox(height: Dimensions.height20,),
+              // SizedBox(height: Dimensions.height20,),
 
               //currency
-              AppTextField(
-                textController: currencyController,
-                hintText: "Currency",
-                icon: Icons.person,
-                textType: TextInputType.name,
-              ),
-              SizedBox(height: Dimensions.height20,),
-
-              //reference
-              AppTextField(
-                textController: referenceController,
-                hintText: "Reference",
-                icon: Icons.edit,
-                textType: TextInputType.text,
-              ),
+              // AppTextField(
+              //   textController: currencyController,
+              //   hintText: "Currency",
+              //   icon: Icons.person,
+              //   textType: TextInputType.name,
+              // ),
+              // SizedBox(height: Dimensions.height20,),
+              //
+              // //reference
+              // AppTextField(
+              //   textController: referenceController,
+              //   hintText: "Reference",
+              //   icon: Icons.edit,
+              //   textType: TextInputType.text,
+              // ),
 
               SizedBox(height: Dimensions.height20,),
 
@@ -132,6 +155,9 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
                 icon: Icons.edit,
                 textType: TextInputType.text,
               ),
+
+              SizedBox(height: Dimensions.height20,),
+
 
               //callback
               AppTextField(
@@ -167,9 +193,17 @@ class GenerateUrlPage extends StatelessWidget {//used stateless widget because G
 
               SizedBox(height: Dimensions.height20,),
 
+              //generated response
+              _authController.message.isNotEmpty ? AppTextField(
+                textController: generatedUrlController,
+                hintText: "Generated url... ",
+                icon: Icons.edit,
+                textType: TextInputType.text,
+              ) : SizedBox.shrink(),
+
             ],
           ),
-        );
+        ) : CustomLoader();
       }),
 
     );
