@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../pages/app_constants.dart';
+import '../../utils/app_constants.dart';
 
 
 class ApiClient extends GetConnect implements GetxService{
@@ -14,7 +14,7 @@ class ApiClient extends GetConnect implements GetxService{
   ApiClient({required this.appBaseUrl, required this.sharedPreferences}){
    baseUrl = appBaseUrl;
    timeout = Duration(seconds: 30);
-   // token = AppConstants.TOKEN;
+   token = AppConstants.TOKEN;
    // token = sharedPreferences.getString(AppConstants.TOKEN)??"";
 
    _mainHeaders = {
