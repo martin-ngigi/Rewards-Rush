@@ -13,7 +13,7 @@ class ApiClient extends GetConnect implements GetxService{
   late Map<String, String> _mainHeaders;
 
   ApiClient({required this.appBaseUrl, required this.sharedPreferences}){
-   baseUrl = appBaseUrl;
+   // baseUrl = appBaseUrl; /// NB: THIS BASE URI CAN BE USED ONLY WHEN WE JUST A SINGLE AND COMMON BASE URL... ELSE SHOULD BE COMMENTED OUT
    timeout = Duration(seconds: 30);
    token = AppConstants.TOKEN;
    // token = sharedPreferences.getString(AppConstants.TOKEN)??"";
